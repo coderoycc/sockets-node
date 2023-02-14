@@ -11,7 +11,11 @@ const error = (err) => {
 };
 const sendMessage = (message, origin)=>{
   // Mandar a todos menos a origin el mensaje
-
+  for(const socket of connections.keys()){
+    if(socket !== origin){
+      socket.write(message)
+    }
+  }
 }
 const listen = (port) => {
   // Instanciamos servidor
@@ -28,10 +32,12 @@ const listen = (port) => {
         console.log(`Usuario ${data} conectado con ${remoteSocket}`)
         connections.set(socket, data)
       }else if (data === END) {
+        connections.delete(socket) // Eliminamos el socket desconectado
         socket.end();
       } else { // Enviar el mensaje al resto de clientes
-        
-        console.log(`${remoteSocket}->${data}`);
+        const fullMsg = `[${connections.get(socket)}]: ${data}`
+        console.log(`${remoteSocket}->${fullMsg}`);
+        sendMessage(fullMsg, socket)
       }
     });
 
