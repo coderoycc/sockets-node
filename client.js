@@ -3,6 +3,12 @@ const readline = require('readline').createInterface({
   input: process.stdin,
   output: process.stdout
 }) //Lectura desde consola
+
+const error = (err) => {
+  console.error(err);
+  process.exit(1); // NO OK
+};
+
 const socket = new Socket()
 const END = 'end' // Palabra para terminar la conexión
 
@@ -27,3 +33,9 @@ socket.on('data', (data) => {
 
 // Verificamos si el servidor confirmo cierre
 socket.on('close', () => process.exit(0))
+
+const main = ()=>{
+  if(process.argv.length !== 4){
+
+  }
+}
